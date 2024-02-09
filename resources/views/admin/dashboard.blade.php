@@ -91,6 +91,14 @@
                         </div>
                         <!-- /.chart-responsive -->
                     </div>
+
+                    <div class="col-lg-12">
+                        <div class="chart">
+                            <!-- Sales Chart Canvas -->
+                            <canvas id="barChart" style="height: 180px;"></canvas>
+                        </div>
+                        <!-- /.chart-responsive -->
+                    </div>
                 </div>
                 <!-- /.row -->
             </div>
@@ -101,39 +109,53 @@
 </div>
 <!-- /.row (main row) -->
 @endsection
-
+{{--{{ dd(json_encode($data_tanggal)) }}--}}
+{{--{{ dd(json_decode($penjualan['produk'])) }}--}}
 @push('scripts')
 <!-- ChartJS -->
-<script src="{{ asset('AdminLTE-2/bower_components/chart.js/Chart.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
 $(function() {
-    // Get context with jQuery - using jQuery's .get() method.
-    var salesChartCanvas = $('#salesChart').get(0).getContext('2d');
-    // This will get the first returned node in the jQuery collection.
-    var salesChart = new Chart(salesChartCanvas);
+    const barColors = ["red", "green","blue","orange","brown"];
 
-    var salesChartData = {
-        labels: {{ json_encode($data_tanggal) }},
-        datasets: [
-            {
-                label: 'Pendapatan',
-                fillColor           : 'rgba(60,141,188,0.9)',
-                strokeColor         : 'rgba(60,141,188,0.8)',
-                pointColor          : '#3b8bba',
-                pointStrokeColor    : 'rgba(60,141,188,1)',
-                pointHighlightFill  : '#fff',
-                pointHighlightStroke: 'rgba(60,141,188,1)',
+    var lineChartCanvas = $('#salesChart').get(0).getContext('2d');
+
+    new Chart(lineChartCanvas, {
+        type: "line",
+        data: {
+            labels: {{ json_encode($data_tanggal) }},
+            datasets: [{
                 data: {{ json_encode($data_pendapatan) }}
+            }]
+        },
+        options: {
+            legend: {display: false},
+            title: {
+                display: true,
+                text: "Penjualan Tertinggi"
             }
-        ]
-    };
+        }
+    });
 
-    var salesChartOptions = {
-        pointDot : false,
-        responsive : true
-    };
+    var barChartCanvas = $('#barChart').get(0).getContext('2d');
 
-    salesChart.Line(salesChartData, salesChartOptions);
+    new Chart(barChartCanvas, {
+        type: "bar",
+        data: {
+            labels: {!!  json_encode($penjualan['produk'])  !!},
+            datasets: [{
+                backgroundColor: barColors,
+                data: {{ json_encode($penjualan['penjualan']) }}
+            }]
+        },
+        options: {
+            legend: {display: false},
+            title: {
+                display: true,
+                text: "Penjualan Barang Teringgi"
+            }
+        }
+    });
 });
 </script>
 @endpush
