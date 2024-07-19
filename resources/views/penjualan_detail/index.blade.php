@@ -33,10 +33,32 @@
 
 @section('breadcrumb')
     @parent
-    <li class="active">Transaksi Penjaualn</li>
+    <li class="active">Transaksi Penjualan</li>
 @endsection
 
 @section('content')
+@if ($stokKurang==true)
+<div class="box-body">
+    <div class="alert alert-error alert-dismissible">
+        <i class="fa fa-warning icon"></i>
+        Stok Tidak Mencukupi!   
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true" style="color: #ffffff">&times;</span>
+        </button>
+    </div>
+</div>
+@endif
+@if ($uangKurang==true)
+<div class="box-body">
+    <div class="alert alert-error alert-dismissible">
+        <i class="fa fa-warning icon"></i>
+        Uang Yang Diterima Kurang!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true" style="color: #ffffff">&times;</span>
+        </button>
+    </div>
+</div>
+@endif 
 <div class="row">
     <div class="col-lg-12">
         <div class="box">
@@ -81,6 +103,7 @@
                         <form action="{{ route('transaksi.simpan') }}" class="form-penjualan" method="post">
                             @csrf
                             <input type="hidden" name="id_penjualan" value="{{ $id_penjualan }}">
+                            <input type="hidden" name="id_produk" id="id_produk2">
                             <input type="hidden" name="total" id="total">
                             <input type="hidden" name="total_item" id="total_item">
                             <input type="hidden" name="bayar" id="bayar">
@@ -106,8 +129,8 @@
                             <div class="form-group row">
                                 <label for="diskon" class="col-lg-2 control-label">Diskon</label>
                                 <div class="col-lg-8">
-                                    <input type="number" name="diskon" id="diskon" class="form-control" 
-                                        value="{{ ! empty($memberSelected->id_member) ? $diskon : 0 }}" 
+                                    <input type="text" name="diskon" id="diskon" class="form-control" 
+                                        value="{{ ! empty($memberSelected->id_member) ? $diskon : '0 %' }}" 
                                         readonly>
                                 </div>
                             </div>
@@ -246,6 +269,7 @@
 
     function pilihProduk(id, kode) {
         $('#id_produk').val(id);
+        $('#id_produk2').val(id);
         $('#kode_produk').val(kode);
         hideProduk();
         tambahProduk();
@@ -256,6 +280,12 @@
             .done(response => {
                 $('#kode_produk').focus();
                 table.ajax.reload(() => loadForm($('#diskon').val()));
+                $.post('{{ route('transaksi.storePenjualan') }}', $('.form-penjualan').serialize())
+                    .done()
+                    .fail(errors => {
+                        alert('Tidak dapat menyimpan data');
+                        return;
+                    });
             })
             .fail(errors => {
                 alert('Tidak dapat menyimpan data');
@@ -270,7 +300,7 @@
     function pilihMember(id, kode) {
         $('#id_member').val(id);
         $('#kode_member').val(kode);
-        $('#diskon').val('{{ $diskon }}');
+        $('#diskon').val('{{ $diskon }} %');
         loadForm($('#diskon').val());
         $('#diterima').val(0).focus().select();
         hideMember();
@@ -296,11 +326,16 @@
         }
     }
 
-    function loadForm(diskon = 0, diterima = 0) {
+    function loadForm(diskon = '', diterima = 0) {
         $('#total').val($('.total').text());
         $('#total_item').val($('.total_item').text());
+        let diskonInt = 0
+        let diskonString = diskon.replace(/\D/g, '');
+        if (diskon && !isNaN(parseInt(diskonString))) {
+            diskonInt = parseInt(diskonString);
+        }
 
-        $.get(`{{ url('/transaksi/loadform') }}/${diskon}/${$('.total').text()}/${diterima}`)
+        $.get(`{{ url('/transaksi/loadform') }}/${diskonInt}/${$('.total').text()}/${diterima}`)
             .done(response => {
                 $('#totalrp').val('Rp. '+ response.totalrp);
                 $('#bayarrp').val('Rp. '+ response.bayarrp);

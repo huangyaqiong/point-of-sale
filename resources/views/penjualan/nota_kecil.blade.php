@@ -95,7 +95,7 @@
         </tr>
         <tr>
             <td>Diskon:</td>
-            <td class="text-right">{{ format_uang($penjualan->diskon) }}</td>
+            <td class="text-right">{{ format_uang($penjualan->diskon) }}%</td>
         </tr>
         <tr>
             <td>Total Bayar:</td>

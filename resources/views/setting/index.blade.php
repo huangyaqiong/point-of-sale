@@ -51,6 +51,7 @@
                             <div class="tampil-logo"></div>
                         </div>
                     </div>
+                <!--
                     <div class="form-group row">
                         <label for="path_kartu_member" class="col-lg-2 control-label">Kartu Member</label>
                         <div class="col-lg-4">
@@ -61,6 +62,7 @@
                             <div class="tampil-kartu-member"></div>
                         </div>
                     </div>
+                 -->
                     <div class="form-group row">
                         <label for="diskon" class="col-lg-2 control-label">Diskon</label>
                         <div class="col-lg-2">

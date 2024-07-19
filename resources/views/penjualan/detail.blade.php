@@ -14,6 +14,7 @@
                         <th>Nama</th>
                         <th>Harga</th>
                         <th>Jumlah</th>
+                        <th>Diskon Produk</th>
                         <th>Subtotal</th>
                     </thead>
                 </table>

@@ -76,7 +76,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/transaksi/selesai', [PenjualanController::class, 'selesai'])->name('transaksi.selesai');
         Route::get('/transaksi/nota-kecil', [PenjualanController::class, 'notaKecil'])->name('transaksi.nota_kecil');
         Route::get('/transaksi/nota-besar', [PenjualanController::class, 'notaBesar'])->name('transaksi.nota_besar');
-
+        Route::get('/transaksi/stokKurang', [PenjualanController::class, 'stokKurang'])->name('transaksi.stokKurang');
+        Route::get('/transaksi/pembayaranKurang', [PenjualanController::class, 'pembayaranKurang'])->name('transaksi.pembayaranKurang');
+        Route::get('/transaksi/pembayaranDanStokKurang', [PenjualanController::class, 'pembayaranDanStokKurang'])->name('transaksi.pembayaranDanStokKurang');
+        Route::post('/transaksi/autosave', [PenjualanDetailController::class, 'storePenjualan'])->name('transaksi.storePenjualan');
+        Route::get('/transaksi/aktif/{id}', [PenjualanController::class, 'transaksiAktifBaru'])->name('transaksi.transaksiAktifBaru');
         Route::get('/transaksi/{id}/data', [PenjualanDetailController::class, 'data'])->name('transaksi.data');
         Route::get('/transaksi/loadform/{diskon}/{total}/{diterima}', [PenjualanDetailController::class, 'loadForm'])->name('transaksi.load_form');
         Route::resource('/transaksi', PenjualanDetailController::class)

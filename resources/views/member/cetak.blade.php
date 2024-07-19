@@ -20,7 +20,7 @@
             font-size: 16pt;
             font-family: Arial, Helvetica, sans-serif;
             font-weight: bold;
-            color: #fff !important;
+            color: #0c0c0c !important;
         }
         .logo p {
             text-align: right;
@@ -40,13 +40,13 @@
             font-size: 12pt;
             font-family: Arial, Helvetica, sans-serif;
             font-weight: bold;
-            color: #fff !important;
+            color: #000 !important;
         }
         .telepon {
             position: absolute;
             margin-top: 120pt;
             right: 16pt;
-            color: #fff;
+            color: #000;
         }
         .barcode {
             position: absolute;
@@ -68,7 +68,7 @@
     </style>
 </head>
 <body>
-    <section style="border: 1px solid #fff">
+    <section style="border: 1px solid #000">
         <table width="100%">
             @foreach ($datamember as $key => $data)
                 <tr>
@@ -92,7 +92,7 @@
                         
                         @if (count($datamember) == 1)
                         <td class="text-center" style="width: 50%;"></td>
-                        @endif
+                        @endif  
                     @endforeach
                 </tr>
             @endforeach

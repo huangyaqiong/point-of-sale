@@ -21,7 +21,7 @@ $(function () {
     datasets: [
       {
         label               : 'Electronics',
-        fillColor           : 'rgb(210, 214, 222)',
+        fillColor           : 'rgb(230, 214, 222)',
         strokeColor         : 'rgb(210, 214, 222)',
         pointColor          : 'rgb(210, 214, 222)',
         pointStrokeColor    : '#c1c7d1',

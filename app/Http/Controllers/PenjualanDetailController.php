@@ -21,8 +21,10 @@ class PenjualanDetailController extends Controller
         if ($id_penjualan = session('id_penjualan')) {
             $penjualan = Penjualan::find($id_penjualan);
             $memberSelected = $penjualan->member ?? new Member();
+            $stokKurang = false;
+            $uangKurang = false;
 
-            return view('penjualan_detail.index', compact('produk', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected'));
+            return view('penjualan_detail.index', compact('produk', 'stokKurang', 'uangKurang', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected'));
         } else {
             if (auth()->user()->level == 1) {
                 return redirect()->route('transaksi.baru');
@@ -93,6 +95,31 @@ class PenjualanDetailController extends Controller
         $detail->subtotal = $produk->harga_jual - ($produk->diskon / 100 * $produk->harga_jual);;
         $detail->save();
 
+        return response()->json('Data berhasil disimpan', 200);
+    }
+
+    public function storePenjualan(Request $request)
+    {
+        $detail = PenjualanDetail::where('id_penjualan', $request->id_penjualan)->get();
+        $totalItem = 0;
+        $totalHarga = 0;
+        foreach ($detail as $item) {
+            $produk = Produk::where('id_produk', $item->id_produk)->first();
+            $totalItem = $totalItem + $item->jumlah;
+            $totalHarga = $totalHarga + ($item->jumlah * $produk->harga_jual);
+        }
+        $diskonString = preg_replace('/\D/', '', $request->diskon);
+        $diskonInt = (int)$diskonString;
+        $bayar = $totalHarga - ($totalHarga * ($diskonInt/100));
+
+        $penjualan = Penjualan::find($request->id_penjualan);
+        $penjualan->total_item = $totalItem;
+        $penjualan->total_harga = $totalHarga;
+        $penjualan->success = 0;
+        $penjualan->bayar = $bayar;
+        $penjualan->diskon = $diskonInt;
+        $penjualan->update();
+        
         return response()->json('Data berhasil disimpan', 200);
     }
 

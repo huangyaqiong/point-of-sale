@@ -32,6 +32,8 @@ function terbilang ($angka) {
 
 function tanggal_indonesia($tgl, $tampil_hari = true)
 {
+    // $timestamp = strtotime($tgl) + (7 * 3600);
+    // $tanggalIndo = date('Y-m-d H:i:s', $timestamp);
     $nama_hari  = array(
         'Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum\'at', 'Sabtu'
     );

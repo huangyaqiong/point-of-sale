@@ -21,8 +21,9 @@
                         <th>Kode Member</th>
                         <th>Total Item</th>
                         <th>Total Harga</th>
-                        <th>Diskon</th>
+                        <th>Diskon Member</th>
                         <th>Total Bayar</th>
+                        <th>Status Transaksi</th>
                         <th>Kasir</th>
                         <th width="15%"><i class="fa fa-cog"></i></th>
                     </thead>
@@ -56,6 +57,7 @@
                 {data: 'total_harga'},
                 {data: 'diskon'},
                 {data: 'bayar'},
+                {data: 'status', searchable: false, sortable: false},
                 {data: 'kasir'},
                 {data: 'aksi', searchable: false, sortable: false},
             ]
@@ -71,10 +73,15 @@
                 {data: 'nama_produk'},
                 {data: 'harga_jual'},
                 {data: 'jumlah'},
+                {data: 'diskon'},
                 {data: 'subtotal'},
             ]
         })
     });
+
+    function editPenjualan(url) {
+        window.location.href = url;
+    }
 
     function showDetail(url) {
         $('#modal-detail').modal('show');

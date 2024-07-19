@@ -13,7 +13,10 @@ class LaporanController extends Controller
     public function index(Request $request)
     {
         $tanggalAwal = date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y')));
-        $tanggalAkhir = date('Y-m-d');
+        // $tgl = date('Y-m-d H:i:s');
+        // $timestamp = strtotime($tgl) + (7 * 3600);
+        $tanggalAkhir =date('Y-m-d');
+        // , $timestamp);
 
         if ($request->has('tanggal_awal') && $request->tanggal_awal != "" && $request->has('tanggal_akhir') && $request->tanggal_akhir) {
             $tanggalAwal = $request->tanggal_awal;
@@ -34,7 +37,7 @@ class LaporanController extends Controller
             $tanggal = $awal;
             $awal = date('Y-m-d', strtotime("+1 day", strtotime($awal)));
 
-            $total_penjualan = Penjualan::where('created_at', 'LIKE', "%$tanggal%")->sum('bayar');
+            $total_penjualan = Penjualan::where('created_at', 'LIKE', "%$tanggal%")->where('success', '=',1)->sum('bayar');
             $total_pembelian = Pembelian::where('created_at', 'LIKE', "%$tanggal%")->sum('bayar');
             $total_pengeluaran = Pengeluaran::where('created_at', 'LIKE', "%$tanggal%")->sum('nominal');
 
